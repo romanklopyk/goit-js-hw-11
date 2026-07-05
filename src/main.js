@@ -16,29 +16,33 @@ const $gallery = document.querySelector('.gallery');
 $form.addEventListener('submit', async (e) => {
   e.preventDefault();
   clearGallery($gallery);
-  showLoader();
+  try {
+    showLoader();
 
-  const query = $input.value;
-  const res = await getImagesByQuery(query);
-  if (res.hits.length === 0) {
-    iziToast.error({
-      message: 'Sorry, there are no images matching your search query. Please try again!',
-      position: 'topRight',
+    const query = $input.value;
+    const res = await getImagesByQuery(query);
+    if (res.hits.length === 0) {
+      iziToast.error({
+        message: 'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+      });
+      hideLoader();
+      return;
+    }
+
+    $gallery.insertAdjacentHTML('beforeend', createGallery(res));
+    let gallery = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+      captionPosition: 'bottom',
+      overlayOpacity: 0.8,
     });
+    gallery.refresh();
+
     hideLoader();
-    return;
+  } catch (e) {
+    console.log(e);
   }
-
-  $gallery.insertAdjacentHTML('beforeend', createGallery(res));
-  let gallery = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-    captionPosition: 'bottom',
-    overlayOpacity: 0.8,
-  });
-  gallery.refresh();
-
-  hideLoader();
 });
 
 
