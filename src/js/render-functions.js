@@ -3,9 +3,17 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const $gallery = document.querySelector('.gallery');
 
+
+let gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  captionPosition: 'bottom',
+  overlayOpacity: 0.8,
+});
+
 function createGallery(images){
-  const arrOfImg = images.hits;
-  const res =  arrOfImg.map (obj =>{
+  // const arrOfImg = images.hits;
+  const res =  images.map (obj =>{
     return `<li class="gallery-item">
                 <a href="${obj.largeImageURL}">
                   <img class="gallery__image"
@@ -24,13 +32,6 @@ function createGallery(images){
   }).join('');
 
   $gallery.insertAdjacentHTML('beforeend', res);
-
-  let gallery = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-    captionPosition: 'bottom',
-    overlayOpacity: 0.8,
-  });
   gallery.refresh();
 }
 

@@ -23,12 +23,16 @@ $form.addEventListener('submit', async (e) => {
         message: 'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
-      hideLoader();
       return;
     }
-    createGallery(res);
+    createGallery(res.hits);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
+    iziToast.error({
+      message: e,
+      position: 'topRight',
+    });
+
   } finally {
     hideLoader();
   }
