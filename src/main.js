@@ -29,7 +29,7 @@ $form.addEventListener('submit', async (e) => {
   } catch (e) {
     // console.log(e);
     iziToast.error({
-      message: e,
+      message: e.message,
       position: 'topRight',
     });
 
