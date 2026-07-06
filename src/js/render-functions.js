@@ -1,6 +1,11 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+const $gallery = document.querySelector('.gallery');
+
 function createGallery(images){
   const arrOfImg = images.hits;
-  return arrOfImg.map (obj =>{
+  const res =  arrOfImg.map (obj =>{
     return `<li class="gallery-item">
                 <a href="${obj.largeImageURL}">
                   <img class="gallery__image"
@@ -10,16 +15,27 @@ function createGallery(images){
                        data-id="${obj.id}">
                 </a>
                 <div class="description">
+                  <p>Likes<span>${obj.likes}</span></p>
                   <p>Views<span>${obj.views}</span></p>
                   <p>Comments<span>${obj.comments}</span></p>
                   <p>Downloads<span>${obj.downloads}</span></p>
                 </div>
             </li>`
   }).join('');
+
+  $gallery.insertAdjacentHTML('beforeend', res);
+
+  let gallery = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    captionPosition: 'bottom',
+    overlayOpacity: 0.8,
+  });
+  gallery.refresh();
 }
 
-function clearGallery(el){
-   el.innerHTML = '';
+function clearGallery(){
+   $gallery.innerHTML = '';
 }
 
 function showLoader() {

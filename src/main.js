@@ -4,9 +4,6 @@ import 'izitoast/dist/css/iziToast.min.css';
 import getImagesByQuery from './js/pixabay-api.js';
 import { createGallery, clearGallery, showLoader, hideLoader } from './js/render-functions.js';
 
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
 
 const $input = document.querySelector('[name="search-text"]');
 const $form = document.querySelector('.form');
@@ -15,11 +12,11 @@ const $gallery = document.querySelector('.gallery');
 
 $form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  clearGallery($gallery);
+  clearGallery();
   try {
     showLoader();
-
-    const query = $input.value;
+    const query = $input.value.trim();
+    if (query === '') return;
     const res = await getImagesByQuery(query);
     if (res.hits.length === 0) {
       iziToast.error({
@@ -29,19 +26,11 @@ $form.addEventListener('submit', async (e) => {
       hideLoader();
       return;
     }
-
-    $gallery.insertAdjacentHTML('beforeend', createGallery(res));
-    let gallery = new SimpleLightbox('.gallery a', {
-      captionsData: 'alt',
-      captionDelay: 250,
-      captionPosition: 'bottom',
-      overlayOpacity: 0.8,
-    });
-    gallery.refresh();
-
-    hideLoader();
+    createGallery(res);
   } catch (e) {
     console.log(e);
+  } finally {
+    hideLoader();
   }
 });
 
